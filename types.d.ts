@@ -19,6 +19,7 @@ type MonthlyStats = {
   total_distance: number;
   total_time: number;
   total_elevation_gain: number;
+  activities: SummaryActivity[];
 };
 
 type PolylineMap = {
