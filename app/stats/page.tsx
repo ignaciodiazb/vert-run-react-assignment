@@ -10,33 +10,12 @@ import {
   TextTableHeaderCell,
 } from '@/evergreen-ui';
 
-export default function StatsPage() {
-  const monthly_stats = [
-    {
-      id: 123456789,
-      month_id: 10,
-      month_name: 'October',
-      total_distance: 84329,
-      total_time: 13222,
-      total_elevation_gain: 112,
-    },
-    {
-      id: 153753747,
-      month_id: 11,
-      month_name: 'November',
-      total_distance: 80232,
-      total_time: 10990,
-      total_elevation_gain: 110,
-    },
-    {
-      id: 5776210921,
-      month_id: 12,
-      month_name: 'December',
-      total_distance: 87481,
-      total_time: 15265,
-      total_elevation_gain: 118,
-    },
-  ];
+import { getMonthlyStats } from '@/app/lib/getMonthlyStats';
+
+export const dynamic = 'force-dynamic';
+
+export default async function StatsPage() {
+  const { data } = await getMonthlyStats();
 
   const tableColumns = [
     { key: 'month', name: 'Month' },
@@ -59,28 +38,26 @@ export default function StatsPage() {
               ))}
             </TableHead>
             <TableBody>
-              {monthly_stats?.map((activity) => (
-                <TableRow height={50} key={activity.id}>
+              {data?.map((month) => (
+                <TableRow height={50} key={month.id}>
                   <TableCell fontSize={15}>
                     <Link
                       className={'underline'}
-                      href={`/stats/${activity.month_id}`}
+                      href={`/stats/${month.month_id}`}
                     >
-                      {activity?.month_name}
+                      {month?.month_name}
                     </Link>
                   </TableCell>
                   <TextTableCell textProps={{ size: 400 }}>
                     {new Intl.NumberFormat('en-US').format(
-                      activity?.total_distance
+                      month?.total_distance
                     )}
                   </TextTableCell>
                   <TextTableCell textProps={{ size: 400 }}>
-                    {new Intl.NumberFormat('en-US').format(
-                      activity?.total_time
-                    )}
+                    {new Intl.NumberFormat('en-US').format(month?.total_time)}
                   </TextTableCell>
                   <TextTableCell textProps={{ size: 400 }}>
-                    {activity?.total_elevation_gain}
+                    {month?.total_elevation_gain}
                   </TextTableCell>
                 </TableRow>
               ))}
