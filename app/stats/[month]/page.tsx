@@ -9,7 +9,7 @@ import {
   TextTableHeaderCell,
 } from '@/evergreen-ui';
 
-import { getActivitiesList } from '@/app/lib/getActivitiesList';
+import { getStatsByMonth } from '@/app/lib/getStatsByMonth';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +18,7 @@ export default async function MonthStatsPage({
 }: {
   params: { month: string };
 }) {
-  const { data } = await getActivitiesList();
+  const data = await getStatsByMonth(+month);
 
   const tableColumns = [
     { key: 'name', name: 'Name' },
@@ -31,7 +31,9 @@ export default async function MonthStatsPage({
   return (
     <div>
       <section>
-        <h1 className={'text-2xl my-5'}>Activities summary: {month}</h1>
+        <h1 className={'text-2xl my-5'}>
+          Activities summary: {data?.month_name}
+        </h1>
         <Pane marginY={20}>
           <Table>
             <TableHead height={50}>
@@ -42,7 +44,7 @@ export default async function MonthStatsPage({
               ))}
             </TableHead>
             <TableBody>
-              {data?.map((activity) => (
+              {data?.activities?.map((activity) => (
                 <TableRow height={50} key={activity.id}>
                   <TextTableCell textProps={{ size: 400 }}>
                     {activity?.name}
